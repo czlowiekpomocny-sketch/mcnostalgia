@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TOP Gildie - MCNOSTALGIA.PL</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:Arial,sans-serif;color:#fff;background:linear-gradient(rgba(5,10,15,.72),rgba(5,10,15,.9)),#07111d}
+.wrap{width:min(1100px,92%);margin:0 auto;padding:34px 0 60px}
+.back{color:#ffd54f;text-decoration:none;font-weight:900;display:inline-block;margin-bottom:24px}
+.title{text-align:center;margin-bottom:28px}
+.title h1{margin:0;font-size:48px;letter-spacing:1px;text-shadow:0 4px 0 #000}
+.title h1 .mc{color:#ff5555}.title h1 .nostalgia{color:#55ffff}.title h1 .pl{color:#aaa}
+.title p{color:#d7e5e8;margin-top:10px}
+.guild-frame{border:4px solid #2b3b2f;background:linear-gradient(135deg,rgba(28,42,31,.96),rgba(10,18,14,.96));box-shadow:0 0 0 4px rgba(0,0,0,.45),0 18px 50px rgba(0,0,0,.45),inset 0 0 28px rgba(85,255,255,.08);border-radius:18px;overflow:hidden}
+.frame-head{padding:18px 22px;background:rgba(0,0,0,.38);border-bottom:3px solid #3b5c43;display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+.frame-head strong{color:#55ffff;font-size:22px;text-shadow:0 0 8px rgba(85,255,255,.4)}
+.frame-head span{color:#ffd54f;font-weight:800}
+table{width:100%;border-collapse:collapse}
+th{background:rgba(0,0,0,.35);color:#ffd54f;padding:16px 12px;text-align:left;font-size:15px;text-transform:uppercase}
+td{padding:18px 12px;border-top:1px solid rgba(255,255,255,.09);font-size:18px}
+tr:nth-child(even) td{background:rgba(255,255,255,.035)}
+.place{font-weight:900;color:#55ffff}.guild{font-weight:900;color:#fff}.owner{color:#aaffaa;font-weight:800}.points{color:#ffd54f;font-weight:900}.members{color:#ff7777;font-weight:900}
+.empty{padding:30px;text-align:center;color:#ddd}
+@media(max-width:700px){.title h1{font-size:34px}th:nth-child(3),td:nth-child(3){display:none}td,th{font-size:14px;padding:13px 8px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Powrót</a>
+<div class="title"><h1><span class="mc">MC</span><span class="nostalgia">NOSTALGIA</span><span class="pl">.PL</span></h1><p>TOP 10 gildii z serwera Survival OldSchool</p></div>
+<div class="guild-frame">
+<div class="frame-head"><strong>🏆 Ranking gildii</strong><span id="updated">Ładowanie...</span></div>
+<table><thead><tr><th>#</th><th>Gildia</th><th>Lider</th><th>Punkty</th><th>Członkowie</th></tr></thead><tbody id="guildTable"></tbody></table>
+<div id="empty" class="empty" style="display:none;">Brak danych gildii.</div>
+</div>
+</div>
+<script>
+fetch("gildie.json?v="+Date.now()).then(r=>r.json()).then(data=>{
+ const table=document.getElementById("guildTable"), empty=document.getElementById("empty"), updated=document.getElementById("updated");
+ table.innerHTML="";
+ const guilds=(data.guilds||data||[]).sort((a,b)=>Number(b.points||0)-Number(a.points||0)).slice(0,10);
+ if(!guilds.length){empty.style.display="block";updated.textContent="Brak danych";return;}
+ guilds.forEach((g,i)=>{table.innerHTML+=`<tr><td class="place">#${i+1}</td><td class="guild">${esc(g.name||g.tag||"BRAK")}</td><td class="owner">${esc(g.owner||"-")}</td><td class="points">${Number(g.points||0)}</td><td class="members">${Number(g.members||0)}</td></tr>`});
+ updated.textContent="Ostatnia aktualizacja: "+new Date().toLocaleString("pl-PL");
+}).catch(()=>{document.getElementById("empty").style.display="block";document.getElementById("empty").textContent="Nie udało się wczytać gildie.json";document.getElementById("updated").textContent="Błąd";});
+function esc(t){return String(t).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+</script>
+</body>
+</html>
