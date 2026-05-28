@@ -37,7 +37,7 @@ tr:nth-child(even) td{background:rgba(255,255,255,.035)}
 </div>
 </div>
 <script>
-fetch("guilds.json?v="+Date.now()).then(r=>r.json()).then(data=>{
+fetch("guilds.json?t=" + Date.now()).then(r=>r.json()).then(data=>{
  const table=document.getElementById("guildTable"), empty=document.getElementById("empty"), updated=document.getElementById("updated");
  table.innerHTML="";
  const guilds=(data.guilds||data||[]).sort((a,b)=>Number(b.points||0)-Number(a.points||0)).slice(0,10);
