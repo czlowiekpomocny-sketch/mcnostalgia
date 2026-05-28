@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TOP Gildie</title>
+
+<style>
+body{
+    background:#07111d;
+    color:white;
+    font-family:Arial;
+    padding:30px;
+}
+
+a{
+    color:#ffd54f;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+}
+
+th{
+    background:#24384b;
+    padding:15px;
+}
+
+td{
+    background:#162636;
+    padding:15px;
+    text-align:center;
+    border-top:1px solid #2d4257;
+}
+
+h1{
+    margin-top:20px;
+}
+</style>
+</head>
+
+<body>
+
+<a href="index.html">← Powrót</a>
+
+<h1>TOP Gildie</h1>
+
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Gildia</th>
+<th>Lider</th>
+<th>Punkty</th>
+<th>Członkowie</th>
+</tr>
+</thead>
+
+<tbody id="guildTable"></tbody>
+
+</table>
+
+<script>
+fetch("gildie.json")
+.then(res => res.json())
+.then(data => {
+
+    const table = document.getElementById("guildTable");
+
+    table.innerHTML = "";
+
+    data.sort((a,b) => b.points - a.points);
+
+    data.forEach((guild,index) => {
+
+        table.innerHTML += `
+        <tr>
+            <td>${index + 1}</td>
+            <td>${guild.name}</td>
+            <td>${guild.owner}</td>
+            <td>${guild.points}</td>
+            <td>${guild.members}</td>
+        </tr>
+        `;
+    });
+});
+</script>
+
+</body>
+</html>
